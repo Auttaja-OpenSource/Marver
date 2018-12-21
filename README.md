@@ -1,5 +1,6 @@
 # Marver
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/0ebe243e3e3249d9a36c7b230dca354a)](https://app.codacy.com/app/auttaja-dev-team/Marver?utm_source=github.com&utm_medium=referral&utm_content=Auttaja-OpenSource/Marver&utm_campaign=Badge_Grade_Settings)
 [![Docker Repository on Quay](https://quay.io/repository/kelwing/marver/status "Docker Repository on Quay")](https://quay.io/repository/kelwing/marver)
 
 Marver is a K8s StatefulSet autoscaler that uses the Discord Gateway Bot endpoint to determine the recommended number of shards and automatically scale up when Discord recommends it.
