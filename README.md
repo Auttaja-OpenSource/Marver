@@ -12,4 +12,3 @@ This project requires that you already be using Kubernetes, and assume you have 
 2.  Store the Discord bot token and webhook ID + token in Kubernetes secrets.
 3.  Edit kubernetes/cronjob.yaml and change the environment variables to match your set up.
 4.  Apply the Kubernetes configurations to the namespace your bot is in, and watch it autoscale :-D
-
