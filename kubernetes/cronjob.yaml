@@ -14,18 +14,18 @@ spec:
             - name: TOKEN
               valueFrom:
                 secretKeyRef:
-                  key: discord
-                  name: token
+                  key: token
+                  name: discord
             - name: WEBHOOK_ID
               valueFrom:
                 secretKeyRef:
-                  key: discord-autoscale-webhook
-                  name: id
+                  key: id
+                  name: discord-autoscale-webhook
             - name: WEBHOOK_TOKEN
               valueFrom:
                 secretKeyRef:
-                  key: discord-autoscale-webhook
-                  name: token
+                  key: token
+                  name: discord-autoscale-webhook
             - name: NAMESPACE
               value: default
             - name: STATEFULSET
