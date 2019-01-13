@@ -1,40 +1,39 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  creationTimestamp: null
   name: marver-cronjob
 spec:
   concurrencyPolicy: Forbid
   failedJobsHistoryLimit: 1
   jobTemplate:
-    metadata:
-      creationTimestamp: null
     spec:
       template:
-        metadata:
-          creationTimestamp: null
         spec:
           containers:
           - env:
             - name: TOKEN
               valueFrom:
                 secretKeyRef:
-                  key: token
-                  name: discord
+                  key: discord
+                  name: token
             - name: WEBHOOK_ID
               valueFrom:
                 secretKeyRef:
-                  key: id
-                  name: marver-webhook
+                  key: discord-autoscale-webhook
+                  name: id
             - name: WEBHOOK_TOKEN
               valueFrom:
                 secretKeyRef:
-                  key: token
-                  name: marver-webhook
+                  key: discord-autoscale-webhook
+                  name: token
             - name: NAMESPACE
               value: default
             - name: STATEFULSET
               value: my-discord-bot
+            - name: CONTAINER_NAME
+              value: my-container-name
+            - name: COUNT_ENV_VAR
+              value: SHARD_COUNT
             image: quay.io/kelwing/marver
             imagePullPolicy: IfNotPresent
             name: marver
@@ -50,4 +49,3 @@ spec:
   schedule: 30 * * * *
   successfulJobsHistoryLimit: 3
   suspend: false
-status: {}

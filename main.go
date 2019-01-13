@@ -25,14 +25,17 @@ import (
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"os"
+	"strconv"
 )
 
 func main() {
 	Token := os.Getenv("TOKEN")
-    webhookID := os.Getenv("WEBHOOK_ID")
-    webhookToken := os.Getenv("WEBHOOK_TOKEN")
-    namespace := os.Getenv("NAMESPACE")
-    statefulSetName := os.Getenv("STATEFULSET")
+	webhookID := os.Getenv("WEBHOOK_ID")
+	webhookToken := os.Getenv("WEBHOOK_TOKEN")
+	namespace := os.Getenv("NAMESPACE")
+	statefulSetName := os.Getenv("STATEFULSET")
+	containerName := os.Getenv("CONTAINER_NAME")
+	envVar := os.Getenv("COUNT_ENV_VAR")
 	dg, err := discordgo.New("Bot " + Token)
 	if err != nil {
 		panic(err)
@@ -58,8 +61,19 @@ func main() {
 		panic(fmt.Errorf("failed to get StatefulSet: %v", err))
 	}
 	shardCount := int32(st.Shards)
-	if shardCount != *result.Spec.Replicas {
+	if shardCount > *result.Spec.Replicas {
+		// Set the replica count
 		result.Spec.Replicas = &shardCount
+		// Set the shard count environment variable - will force existing shards to restart
+		for i, container := range result.Spec.Template.Spec.Containers {
+			if container.Name == containerName {
+				for j, environmentVariable := range result.Spec.Template.Spec.Containers[i].Env {
+					if environmentVariable.Name == envVar {
+						result.Spec.Template.Spec.Containers[i].Env[j].Value = strconv.Itoa(st.Shards)
+					}
+				}
+			}
+		}
 		_, err = statefulSetsClient.Update(result)
 		fmt.Println("Updated StatefulSet to", st.Shards, "replicas")
 		params := discordgo.WebhookParams{
